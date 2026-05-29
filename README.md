@@ -14,7 +14,8 @@ A Redmine plugin that synchronizes users and groups automatically from LDAP/Acti
 > The original plugin supported Redmine 3.x / Rails 4.
 > This version has been fully ported and enhanced for modern Redmine installations.
 > 
-> Tested with:
+## Tested with:
+
 | Component | Version |
 |-----------|---------|
 | Redmine   | 6.1.2 |
