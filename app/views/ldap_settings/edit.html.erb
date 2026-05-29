@@ -1,0 +1,46 @@
+<div class="contextual">
+<%= change_status_link(@ldap_setting) %>
+</div>
+
+<h2><%= link_to l(:label_ldap_servers), ldap_settings_path %> &#187; <%=h @ldap_setting.name %></h2>
+
+<%# Tab fejlécek - ezek mindig látszanak %>
+<div class="tabs">
+  <ul>
+    <% ldap_setting_tabs(nil).each do |tab| %>
+      <li><a href="#tab-<%= tab[:name] %>" id="tab-<%= tab[:name] %>"
+             class="<%= 'selected' if tab[:name] == (params[:tab] || 'LdapSettings') %>">
+        <%= l(tab[:label]) %>
+      </a></li>
+    <% end %>
+  </ul>
+</div>
+
+<%# LdapSettings + SynchronizationActions + Test - egy formban %>
+<%= labelled_form_for @ldap_setting, :html => {:class => 'tabular', :id => 'ldap-main-form'} do |f| %>
+  <% ldap_setting_tabs(f).each do |tab| %>
+    <% next if tab[:name] == 'Schedule' %>
+    <div id="tab-content-<%= tab[:name] %>"
+         class="tab-content"
+         style="<%= 'display:none' unless tab[:name] == (params[:tab] || 'LdapSettings') %>">
+      <%= render :partial => tab[:partial], :locals => {:tab => tab} %>
+    </div>
+  <% end %>
+  <p id="main-form-submit" style="<%= 'display:none' if (params[:tab] == 'Schedule') %>">
+    <%= submit_tag l(:button_save), :id => 'commit-save' %>
+  </p>
+<% end %>
+
+<%# Schedule tab - saját form, a nagy formon KÍVÜL %>
+<div id="tab-content-Schedule"
+     class="tab-content"
+     style="<%= 'display:none' unless params[:tab] == 'Schedule' %>">
+  <%= render :partial => 'schedule', :locals => {:tab => {:name => 'Schedule'}} %>
+</div>
+
+<% html_title(l(:label_ldap_synchronization)) %>
+
+<% content_for :header_tags do %>
+  <%= javascript_include_tag base_settings_ldap_settings_path(:format => 'js') %>
+  <%= javascript_include_tag 'ldap_settings.js', :plugin => 'redmine_ldap_sync' %>
+<% end %>

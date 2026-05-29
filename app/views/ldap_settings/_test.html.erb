@@ -1,0 +1,43 @@
+<% f = tab[:form] %>
+<% if f.object.errors.any? %>
+<div id="errorExplanation"><ul><% f.object.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %></ul></div>
+<% end %>
+<div class="box tabular settings">
+  <%= labelled_fields_for f.object.test do |t| -%>
+  <p>
+    <%= t.label :test_users %>
+    <%= t.text_field :test_users,
+        :placeholder => 'e.g. john.doe@company.com, jane.smith',
+        :style => 'width: 300px',
+        :title => 'Enter login name or UPN (user@domain.com). Multiple users: comma separated.' %>
+    <em class="info" style="margin-left:6px; color:#888; font-size:0.85em;">login or UPN · comma separated</em>
+  </p>
+  <p>
+    <%= t.label :test_groups %>
+    <%= t.text_field :test_groups,
+        :placeholder => 'e.g. redmine_users, redmine_admins',
+        :style => 'width: 300px',
+        :title => 'Enter group name. Multiple groups: comma separated.' %>
+    <em class="info" style="margin-left:6px; color:#888; font-size:0.85em;">group name · comma separated</em>
+  </p>
+
+  <% if t.object.connect_as_user? -%>
+    <p><%= t.label :bind_user %><%= t.text_field :bind_user %></p>
+    <p><%= t.label :bind_password %><%= t.text_field :bind_password %></p>
+  <% end -%>
+
+  <p>
+    <button type="button" id="commit-test" class="icon icon-play"
+            data-test-url="<%= url_for(:action => 'test', :id => f.object.id, :format => 'text') %>">
+      <%= l(:button_execute) %>
+    </button>
+  </p>
+
+  <div class="autoscroll">
+  <fieldset>
+    <legend><%=l(:label_result)%></legend>
+    <pre id="test-result"><%=l :label_not_executed %></pre>
+  </fieldset>
+  </div>
+  <% end -%>
+</div>

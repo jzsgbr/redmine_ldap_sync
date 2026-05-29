@@ -1,0 +1,45 @@
+/*
+ * Redmine LDAP Sync - CSS
+ * Updated for Redmine 6.x / Tabler Icons
+ */
+
+fieldset.box legend { padding-left: 2px; background-image: none; cursor: default; }
+
+/* Redmine 6 automatikusan generált ikonját elrejtjük */
+#admin-menu a.ldap-sync-menu::before {
+  content: '' !important;
+  background-image: url('../images/icon-ldap-sync.svg') !important;
+  background-repeat: no-repeat !important;
+  background-size: 1em 1em !important;
+  background-position: center !important;
+  filter: brightness(0) !important;
+  width: 1em !important;
+  height: 1em !important;
+  font-size: 1em !important;
+}
+
+tr.ldap_setting.disabled { color: #AAAAAA; }
+tr.ldap_setting.disabled a { color: #AAAAAA; }
+
+.paragraph { padding-left: 300px; }
+
+#dyngroups-cache-ttl { display: none; }
+#dyngroups-cache-ttl label { float: none; margin-left: 25px; margin-right: 3px; }
+
+pre#test-result {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 4em;
+  background: #f8f8f8;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  color: #333;
+  font-family: monospace;
+}
+
+/* Schedule tab */
+#ldap-schedule-box h3 { margin: 16px 0 8px; font-size: 1em; color: #444; }
+#ldap-schedule-box hr { border: none; border-top: 1px solid #e0e0e0; }
+.schedule-status { color: #555; line-height: 1.8; }
+#run-now-output { color: #333; font-size: 0.85em; max-height: 200px; overflow-y: auto; }

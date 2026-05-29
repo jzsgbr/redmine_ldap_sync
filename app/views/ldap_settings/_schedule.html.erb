@@ -1,0 +1,82 @@
+<%= form_tag update_schedule_ldap_setting_path(@ldap_setting), method: :put, id: 'schedule-form' do %>
+
+<div class="box tabular settings" id="ldap-schedule-box">
+
+  <h3><%= l(:label_auto_sync) %></h3>
+
+  <p>
+    <label>
+      <%= check_box_tag 'schedule[schedule_enabled]', '1',
+          @ldap_setting.schedule_enabled?, id: 'schedule_enabled' %>
+      <%= l(:label_enable_auto_sync) %>
+    </label>
+  </p>
+
+  <div id="schedule-options" style="<%= 'display:none' unless @ldap_setting.schedule_enabled? %>">
+
+    <p>
+      <%= label_tag :schedule_frequency, l(:label_frequency) %>
+      <%= select_tag 'schedule[schedule_frequency]',
+          options_for_select(options_for_schedule_frequency, @ldap_setting.schedule_frequency),
+          id: 'schedule_frequency' %>
+    </p>
+
+    <div id="schedule-time-options" style="<%= 'display:none' if ['every_15_min','every_30_min'].include?(@ldap_setting.schedule_frequency) %>">
+      <p>
+        <%= label_tag :schedule_run_at, l(:label_run_at) %>
+        <span id="schedule-hour-select" style="<%= 'display:none' if @ldap_setting.schedule_frequency == 'hourly' %>">
+          <%= select_tag 'schedule[schedule_hour]',
+              options_for_select(options_for_schedule_hour, @ldap_setting.schedule_hour),
+              id: 'schedule_hour' %>
+        </span>
+        <span id="schedule-hour-colon" style="<%= 'display:none' if @ldap_setting.schedule_frequency == 'hourly'; 'margin: 0 4px; font-weight:bold;' %>">:</span>
+        <% if @ldap_setting.schedule_frequency == 'hourly' %>
+          <%= select_tag 'schedule[schedule_minute]',
+              options_for_select(options_for_schedule_minute, @ldap_setting.schedule_minute),
+              id: 'schedule_minute' %>
+        <% else %>
+          <%= select_tag 'schedule[schedule_minute]',
+              options_for_select(options_for_schedule_minute_full, @ldap_setting.schedule_minute),
+              id: 'schedule_minute' %>
+        <% end %>
+        <em id="schedule-time-hint" style="color:#888; font-size:0.85em; margin-left:10px;"></em>
+      </p>
+    </div>
+
+    <% if @ldap_setting.schedule_last_run_at.present? || @ldap_setting.schedule_next_run_at.present? %>
+    <div class="schedule-status">
+      <% if @ldap_setting.schedule_last_run_at.present? %>
+        <div>📅 <%= l(:label_last_run) %>: <strong><%= Time.parse(@ldap_setting.schedule_last_run_at.to_s).in_time_zone(Setting.time_zone.presence || 'UTC').strftime('%Y-%m-%d %H:%M') rescue @ldap_setting.schedule_last_run_at %></strong></div>
+      <% end %>
+      <% if @ldap_setting.schedule_next_run_at.present? %>
+        <div>⏭ <%= l(:label_next_run) %>: <strong><%= Time.parse(@ldap_setting.schedule_next_run_at.to_s).in_time_zone(Setting.time_zone.presence || 'UTC').strftime('%Y-%m-%d %H:%M') rescue @ldap_setting.schedule_next_run_at %></strong></div>
+      <% end %>
+    </div>
+    <% end %>
+
+  </div>
+
+  <p style="margin-top:16px;">
+    <%= submit_tag l(:button_save_schedule), class: 'button' %>
+  </p>
+
+</div>
+
+<% end %>
+
+<hr style="margin:20px 0; border:none; border-top:1px solid #e0e0e0;">
+
+<div class="box tabular settings">
+  <h3><%= l(:label_manual_sync) %></h3>
+  <p style="color:#666; font-size:0.9em;"><%= l(:label_manual_sync_hint) %></p>
+  <p>
+    <button type="button" id="run-now-btn" class="icon icon-play"
+            data-url="<%= run_now_ldap_setting_path(@ldap_setting) %>">
+      <%= l(:button_run_now) %>
+    </button>
+    <span id="run-now-spinner" style="display:none; margin-left:8px;">⏳ Running...</span>
+  </p>
+  <div id="run-now-result" style="display:none; margin-top:8px;">
+    <pre id="run-now-output"></pre>
+  </div>
+</div>

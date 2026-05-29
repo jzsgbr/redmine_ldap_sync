@@ -1,0 +1,9 @@
+<% @test.users_at_ldap.each do |(login, data)| -%>
+User "<%= login %>":
+<%= data == :not_found ? "    #{l(:label_not_found)}\n" : user_fields_list(data[:fields], data[:groups]) %>
+<% end -%>
+<% @test.groups_at_ldap.each do |(name, data)| -%>
+Group "<%= name %>":
+<%= data == :not_found ? "    #{l(:label_not_found)}\n" : group_fields_list(data[:fields]) %>
+<% end -%>
+✓ LDAP connection OK — sync is operational.
