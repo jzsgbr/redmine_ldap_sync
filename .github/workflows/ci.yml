@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: redmine
+          POSTGRES_PASSWORD: redminepassword
+          POSTGRES_DB: redmine_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    strategy:
+      matrix:
+        ruby: ['3.2', '3.3', '3.4']
+        redmine: ['6.0-stable', '6.1-stable']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Ruby ${{ matrix.ruby }}
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - name: Clone Redmine ${{ matrix.redmine }}
+        run: |
+          git clone --depth 1 --branch ${{ matrix.redmine }} \
+            https://github.com/redmine/redmine.git ../redmine
+
+      - name: Link plugin
+        run: ln -s $(pwd) ../redmine/plugins/redmine_ldap_sync
+
+      - name: Install dependencies
+        run: |
+          cd ../redmine
+          bundle install
+
+      - name: Run migrations
+        run: |
+          cd ../redmine
+          bundle exec rake db:migrate RAILS_ENV=test
+
+      - name: Run plugin tests
+        run: |
+          cd ../redmine
+          bundle exec rake redmine:plugins:test NAME=redmine_ldap_sync RAILS_ENV=test
