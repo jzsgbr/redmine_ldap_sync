@@ -5,7 +5,7 @@
 [![Ruby](https://img.shields.io/badge/Ruby-3.x-red)](https://www.ruby-lang.org)
 [![License](https://img.shields.io/badge/License-GPL%20v3-blue)](LICENSE)
 
-A Redmine plugin that synchronizes users and groups from LDAP/Active Directory.
+A Redmine plugin that synchronizes users and groups automatically from LDAP/Active Directory.
 
 > **This is a Rails 7 / Redmine 6 compatible port** of the original
 > [redmine_ldap_sync](https://github.com/thorin/redmine_ldap_sync) plugin
