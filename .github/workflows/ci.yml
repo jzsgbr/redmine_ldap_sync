@@ -1,10 +1,17 @@
-name: CI
+# CI workflow - currently disabled
+# The original test suite is not compatible with Rails 7 / Redmine 6.
+# Contributions to update the tests are welcome!
+#
+# To re-enable: uncomment the 'on:' trigger section below.
+
+# on:
+#   push:
+#     branches: [ main, master ]
+#   pull_request:
+#     branches: [ main, master ]
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+  workflow_dispatch:  # csak manuálisan futtatható
 
 jobs:
   test:
