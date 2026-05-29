@@ -34,3 +34,7 @@ assignees: ''
 ## Error log
 
 <!-- Paste the relevant lines from production.log or docker logs -->
+
+## Additional context
+
+<!-- Any other relevant information -->
