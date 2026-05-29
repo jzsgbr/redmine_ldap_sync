@@ -132,7 +132,8 @@ Go to **Administration → LDAP Synchronization** and click your LDAP server.
 | Users must be members of | Required group for Redmine access |
 | Create users | Auto-create users found in LDAP |
 | Create groups | Auto-create groups found in LDAP |
-
+| Remove users | Remove users that are no longer present in LDAP |
+| Remove groups | Remove groups that are no longer present in LDAP |
 ---
 
 ## Scheduler
