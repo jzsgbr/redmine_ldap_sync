@@ -46,10 +46,10 @@
     <% if @ldap_setting.schedule_last_run_at.present? || @ldap_setting.schedule_next_run_at.present? %>
     <div class="schedule-status">
       <% if @ldap_setting.schedule_last_run_at.present? %>
-        <div>📅 <%= l(:label_last_run) %>: <strong><%= Time.parse(@ldap_setting.schedule_last_run_at.to_s).in_time_zone(Setting.time_zone.presence || 'UTC').strftime('%Y-%m-%d %H:%M') rescue @ldap_setting.schedule_last_run_at %></strong></div>
+        <div>📅 <%= l(:label_last_run) %>: <strong><%= Time.parse(@ldap_setting.schedule_last_run_at.to_s).localtime.strftime('%Y-%m-%d %H:%M') rescue @ldap_setting.schedule_last_run_at %></strong></div>
       <% end %>
       <% if @ldap_setting.schedule_next_run_at.present? %>
-        <div>⏭ <%= l(:label_next_run) %>: <strong><%= Time.parse(@ldap_setting.schedule_next_run_at.to_s).in_time_zone(Setting.time_zone.presence || 'UTC').strftime('%Y-%m-%d %H:%M') rescue @ldap_setting.schedule_next_run_at %></strong></div>
+        <div>⏭ <%= l(:label_next_run) %>: <strong><%= Time.parse(@ldap_setting.schedule_next_run_at.to_s).localtime.strftime('%Y-%m-%d %H:%M') rescue @ldap_setting.schedule_next_run_at %></strong></div>
       <% end %>
     </div>
     <% end %>
